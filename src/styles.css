@@ -1,86 +1,131 @@
-/* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import 'primeicons/primeicons.css';
 
 :root {
     color-scheme: light dark;
     --bg: #0b0b0d;
     --surface: #121316;
+    --surface-hover: #1a1a1f;
     --text: #e6e8eb;
     --muted: #a1a6ad;
     --link: #e6e8eb;
-    --accent: #7dd3fc;
-    --link-hover: #9de3ff;
+    --accent: #B1DEDB;
+    --link-hover: #cceeea;
+    --border: #23252a;
     background-color: var(--bg);
 }
 
-body {
-    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    margin: 0 auto;
-    background-color: var(--bg);
-    color: var(--text);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
 html {
     scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
 }
 
-p { 
-    color: var(--muted);
-    text-align:center;
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-article {
-    text-align: center;
-    margin: 0 auto;
-    background-color: var(--surface);
-    width: 80%;
-    border-radius: 12px;
+::-webkit-scrollbar {
+    display: none;
 }
 
-@media (max-width: 600px){
-    article {
-        width: min(90%, 1200px);
-        padding: clamp(1rem, 3vw, 2rem);
-        margin: 0.5rem auto;
-    }
-}   
-
-section {
-    text-align: center;
-    background-color: var(--surface);
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 a {
     color: var(--link);
-    font-size: 0.84rem;
+    font-size: 0.9rem;
     text-decoration: none;
     transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
 a:hover { 
-    color: var(--link-hover); text-shadow: 0 0 8px rgba(255, 255, 255, 0.35); 
+    color: var(--link-hover); 
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.35); 
 }
 
-h1, h2, p {
+h1, h2, h3, p {
     margin: 0;
-    padding: 10px;
+    padding: 0;
 }
 
-h1{
-    font-size: 3rem;
+h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     line-height: 1.15;
-    font-family: 'Inter', sans-serif;
     color: var(--text);
     text-align: center;
+    margin-bottom: 2rem;
 }
 
-h2{
+h2 {
     font-weight: 700;
     line-height: 1.2;
-    font-family: 'Inter', sans-serif;
     color: var(--text);
+}
+
+p { 
+    color: var(--muted);
     text-align: center;
+    line-height: 1.7;
+    max-width: 700px;
+}
+
+.github-link {
+    margin-top: 1.5rem;
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 1rem;
+}
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: var(--text);
+}
+
+.contact-link:hover {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(177, 222, 219, 0.15);
+}
+
+.contact-link i {
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.contact-link span {
+    font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        margin-bottom: 1.5rem;
+    }
 }

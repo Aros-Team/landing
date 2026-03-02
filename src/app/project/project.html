@@ -1,13 +1,34 @@
-<article>
-    <div class="projects-container">
-        @for (project of projects; track project.name) {
-            <div class="project-card" tabindex="0">
-                <img class="project-image" [src]="project.images[0]" alt="{{ project.name }}" />
-                <div class="project-overlay">
-                    <h2 class="project-title">{{ project.name }}</h2>
-                    <p class="project-description">{{ project.description }}</p>
+<article class="carousel">
+    <div class="carousel-container">
+        @for (project of projects; track project.name; let i = $index) {
+            <div 
+                class="carousel-slide" 
+                [class.active]="i === currentIndex()"
+                [class.prev]="i === prevIndex()"
+                [class.next]="i === nextIndex()">
+                <img [src]="project.images[0]" [alt]="project.name" />
+                <div class="project-info">
+                    <h3>{{ project.name }}</h3>
+                    <p>{{ project.description }}</p>
                 </div>
             </div>
+        }
+    </div>
+
+    <button class="carousel-btn prev" (click)="prev()">
+        <i class="pi pi-chevron-left"></i>
+    </button>
+    <button class="carousel-btn next" (click)="next()">
+        <i class="pi pi-chevron-right"></i>
+    </button>
+
+    <div class="carousel-dots">
+        @for (project of projects; track project.name; let i = $index) {
+            <button 
+                class="dot" 
+                [class.active]="i === currentIndex()"
+                (click)="goTo(i)">
+            </button>
         }
     </div>
 </article>

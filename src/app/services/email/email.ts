@@ -1,27 +1,25 @@
 import { Injectable } from '@angular/core';
-import emailjs from '@emailjs/browser'; // 1. Importamos la librería
-import { environment } from '../../../environments/environment.development'; // 2. Importamos tus claves
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class EmailService {
 
-  constructor() { }
+  private apiUrl = `${environment.apiBaseUrl}/lead`;
 
+  constructor() { }
+  
   async sendLead(data: any): Promise<void> {
-    try {
-      const response = await emailjs.send(
-        environment.emailjs.serviceId,
-        environment.emailjs.templateId,
-        data,
-        environment.emailjs.publicKey
-      );
-      
-      console.log('Correo enviado', response.status, response.text);
-    } catch (error) {
-      console.error('Fallo en el envio del correo: ', error);
-      throw error;
-    }
+    // TODO: Descomentar cuando la API esté disponible
+    // const response = await fetch(this.apiUrl, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(data)
+    // });
+
+    console.log('[MOCK] Lead capturado:', data);
+    console.log('[MOCK] Se enviaría a:', this.apiUrl);
   }
 }

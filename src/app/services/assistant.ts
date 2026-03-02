@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Gemini {
+export class Assistant {
 
-  private apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${environment.apiKey}`;
+  private apiUrl = `${environment.apiBaseUrl}/chat`;
 
   private systemPrompt = `
       ROL: Consultor de Estrategia Digital.
@@ -45,6 +45,18 @@ export class Gemini {
       }
     };
 
-    return this.http.post(this.apiUrl, body);
+    // TODO: Descomentar cuando la API esté disponible
+    // return this.http.post(this.apiUrl, body);
+
+    // Mock de respuesta para desarrollo
+    return of({
+      candidates: [{
+        content: {
+          parts: [{
+            text: '¡Hola! Gracias por escribirnos. Cuéntanos, ¿en qué podemos ayudarte hoy?'
+          }]
+        }
+      }]
+    });
   }
 }

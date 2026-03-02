@@ -1,10 +1,17 @@
 <section class="top-bar">
     <img class="logo" src="/aros.ico" alt="Aros logo">
-    <nav class="options-top-bar">
-        <a href="#projects">Projects</a>
-        <a href="#about-us">About us</a>
-        <a href="#contact-us">Contact</a>
-        <a href="#partners">Partners</a>
+    
+    <button class="menu-toggle" (click)="toggleMenu()" [class.open]="menuOpen()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav class="options-top-bar" [class.open]="menuOpen()">
+        <a href="#projects" [class.active]="activeSection === 'projects'" (click)="closeMenu()">Projects</a>
+        <a href="#about-us" [class.active]="activeSection === 'about-us'" (click)="closeMenu()">About us</a>
+        <a href="#contact-us" [class.active]="activeSection === 'contact-us'" (click)="closeMenu()">Contact</a>
+        <a href="#partners" [class.active]="activeSection === 'partners'" (click)="closeMenu()">Partners</a>
     </nav>
 
 </section>

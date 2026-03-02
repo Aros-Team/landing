@@ -1,33 +1,41 @@
 
-<app-top-bar/>
-<article>
-    <h1 id="projects">{{title}} Projects</h1>
-    <app-project/>
-</article>
+<app-top-bar [activeSection]="activeSection()"/>
 
-<article>
-    <h1 id="about-us">About us</h1>
-    <p>
-    Aros is a dedicated development team driven by a singular passion: to transform your business vision into innovative digital realities. In a digital landscape that changes daily, we believe that high-quality technology should be an asset, not a bottleneck.
+<main>
+    <section #sectionRef id="projects" class="section">
+        <h1>{{title}} Projects</h1>
+        <app-project/>
+    </section>
 
-    We define ourselves by our agility. By maintaining a lean and focused structure, we cut through the bureaucracy and overhead that slow down traditional agencies. This streamlined approach allows us to operate with exceptional speed and precision, ensuring that we deliver robust, scalable solutions when you need them.
+    <section #sectionRef id="about-us" class="section">
+        <h1>About us</h1>
+        <p>
+        Aros is a dedicated development team driven by a singular passion: to transform your business vision into innovative digital realities. In a digital landscape that changes daily, we believe that high-quality technology should be an asset, not a bottleneck.
 
-    Our philosophy is grounded in efficiency.
-    </p>
-</article>
+        We define ourselves by our agility. By maintaining a lean and focused structure, we cut through the bureaucracy and overhead that slow down traditional agencies. This streamlined approach allows us to operate with exceptional speed and precision, ensuring that we deliver robust, scalable solutions when you need them.
 
-<article>
-    <h1 id="contact-us">Contact us</h1>
-    <p>
-    Email: team@aros.services
-    <br/>
-    <a href="https://github.com/Aros-Team">GitHub/Aros-Team</a>
-    </p>
-</article>
+        Our philosophy is grounded in efficiency.
+        </p>
+    </section>
 
-<article>
-    <h1 id="partners">Partners</h1>
-    <app-collaborator/>
-</article>
+    <section #sectionRef id="contact-us" class="section">
+        <h1>Contact us</h1>
+        <div class="contact-links">
+            <a href="mailto:team@aros.services" class="contact-link">
+                <i class="pi pi-envelope"></i>
+                <span>team@aros.services</span>
+            </a>
+            <a href="https://github.com/Aros-Team" target="_blank" class="contact-link">
+                <i class="pi pi-github"></i>
+                <span>GitHub/Aros-Team</span>
+            </a>
+        </div>
+    </section>
+
+    <section #sectionRef id="partners" class="section">
+        <h1>Partners</h1>
+        <app-collaborator/>
+    </section>
+</main>
 
 <app-chat/>

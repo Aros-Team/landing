@@ -1,71 +1,171 @@
 :host {
     display: block;
-}
-
-.projects-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-    padding: 10px 0;
-}
-
-.project-card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border: 1px solid #23252a;
-    border-radius: 4px;
-    padding: 6px;
-    text-align: left;
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.project-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(125, 211, 252, 0.12);
-    border-color: #ffffff;
-}
-
-.project-title {
-    color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 700;
-    margin-top: 10px;
-}
-
-.project-description {
-    color: var(--text);
-    line-height: 0.85rem;
-    font-size: 0.8rem;
-    opacity: 0.9;
-}
-
-img {
     width: 100%;
-    height: auto;
-    display: block;
-    margin: 10px 0 14px 0;
-    border-radius: 10px;
-    border: 1px solid #23252a;
+    max-width: 400px;
 }
 
-.project-overlay {
+.carousel {
+    position: relative;
+    width: 100%;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.carousel-slide {
     position: absolute;
     inset: 0;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
 }
 
-.project-card:hover .project-overlay,
-.project-card:focus-within .project-overlay {
+.carousel-slide.active {
     opacity: 1;
-    pointer-events: auto;
+    transform: translateX(0);
+    z-index: 2;
+}
+
+.carousel-slide.prev {
+    opacity: 0;
+    transform: translateX(-100%);
+    z-index: 1;
+}
+
+.carousel-slide.next {
+    opacity: 0;
+    transform: translateX(100%);
+    z-index: 1;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    animation: zoomIn 0.5s ease;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(1.1);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.project-info {
+    flex: 1;
+    padding: 16px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    animation: fadeInUp 0.5s ease 0.1s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.project-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    animation: fadeIn 0.5s ease 0.2s both;
+}
+
+.project-info p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0;
+    animation: fadeIn 0.5s ease 0.3s both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    opacity: 0;
+}
+
+.carousel:hover .carousel-btn {
+    opacity: 1;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot:hover {
+    background: var(--muted);
+    transform: scale(1.2);
+}
+
+.dot.active {
+    background: var(--accent);
+    transform: scale(1.3);
+    box-shadow: 0 0 12px rgba(177, 222, 219, 0.5);
 }

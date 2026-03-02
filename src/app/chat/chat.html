@@ -1,4 +1,4 @@
-@if (isChatOpened) {
+@if (isChatOpened()) {
   <div class="chat-container">
     
     <div class="chat-header" (click)="toggleChat()">
@@ -8,14 +8,14 @@
 
     <div class="messages-area" #chatContainer>
 
-      @for (msg of messages; track $index) {
+      @for (msg of messages(); track $index) {
         <div class="message-bubble" [class.user]="msg.role === 'user'">
           <strong>{{ msg.role === 'user' ? 'Yo' : 'Aroshi' }}:</strong>
           <p>{{ msg.text }}</p>
         </div>
       }
 
-      @if (isLoading) {
+      @if (isLoading()) {
         <div class="message-bubble bot loading">
           Escribiendo...
         </div>
@@ -25,7 +25,8 @@
 
     <div class="input-area">
       <input 
-        [(ngModel)]="userMessage" 
+        [ngModel]="userMessage()" 
+        (ngModelChange)="userMessage.set($event)"
         (keydown.enter)="sendMessage()"
         placeholder="Escribe tu idea aquí..." 
         type="text"
@@ -35,6 +36,6 @@
   </div>
 } @else {
   <div class="chat-icon" (click)="toggleChat()">
-    <img class="chat-icon-image" src="/Logo-chat-bot.png" alt="Chat Icon" />
+    <i class="pi pi-sparkles chat-icon-image"></i>
   </div>
 }

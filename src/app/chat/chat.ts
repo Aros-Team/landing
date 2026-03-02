@@ -1,7 +1,7 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Gemini } from '../services/gemini';
+import { Assistant } from '../services/assistant';
 import { EmailService } from '../services/email/email';
 
 @Component({
@@ -13,70 +13,76 @@ import { EmailService } from '../services/email/email';
 })
 export class Chat {
   
-  messages: { text: string; role: 'user' | 'bot' }[] = [];
+  messages = signal<{ text: string; role: 'user' | 'bot' }[]>([]);
   
-  userMessage: string = '';
+  userMessage = signal('');
 
-  isLoading: boolean = false;
+  isLoading = signal(false);
 
-  isChatOpened: boolean = false;
-  
+  isChatOpened = signal(false);
+
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
-  constructor(private geminiService: Gemini, private emailService: EmailService) {}
+  constructor(private assistantService: Assistant, private emailService: EmailService) {
+    effect(() => {
+      if (this.messages().length > 0) {
+        this.scrollToBottom();
+      }
+    });
+  }
 
   toggleChat() {
-  this.isChatOpened = !this.isChatOpened;
+    this.isChatOpened.update(v => !v);
   }
 
   scrollToBottom() {
     requestAnimationFrame(() => {
-      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      if (this.chatContainer?.nativeElement) {
+        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      }
     });
   }
 
   sendMessage() {
-    if (!this.userMessage.trim()) return;
+    const prompt = this.userMessage().trim();
+    if (!prompt) return;
 
-    const prompt = this.userMessage;
-    this.messages.push({ text: prompt, role: 'user' });
-    this.scrollToBottom()
-    this.userMessage = ''; 
-    this.isLoading = true;
+    this.messages.update(msgs => [...msgs, { text: prompt, role: 'user' }]);
+    this.userMessage.set('');
+    this.isLoading.set(true);
 
-    const historyForApi = this.messages.map(msg => ({
+    const historyForApi = this.messages().map(msg => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.text }]
     }));
 
-    this.geminiService.sendMessage(prompt, historyForApi).subscribe({
+    this.assistantService.sendMessage(prompt, historyForApi).subscribe({
       next: (response) => {
-      let fullText = response.candidates[0].content.parts[0].text;
-      let textToShow = fullText;
+        let fullText = response.candidates[0].content.parts[0].text;
+        let textToShow = fullText;
 
-      const jsonMatch = fullText.match(/~~~JSON\s*([\s\S]*?)\s*~~~/);
+        const jsonMatch = fullText.match(/~~~JSON\s*([\s\S]*?)\s*~~~/);
 
-      if (jsonMatch) {
-        try {
-          const leadData = JSON.parse(jsonMatch[1]);
-          
-          console.log("información de contacto obtenida");
-          this.emailService.sendLead(leadData);
+        if (jsonMatch) {
+          try {
+            const leadData = JSON.parse(jsonMatch[1]);
+            
+            console.log("información de contacto obtenida");
+            this.emailService.sendLead(leadData);
 
-          textToShow = fullText.replace(jsonMatch[0], '').trim();
-        } catch (e) {
-          console.error("Error al leer la nota secreta:", e);
+            textToShow = fullText.replace(jsonMatch[0], '').trim();
+          } catch (e) {
+            console.error("Error al leer la nota secreta:", e);
+          }
         }
-      }
-      
-      this.isLoading = false;
-      this.messages.push({ text: textToShow, role: 'bot' });
-      this.scrollToBottom()
-    },
+        
+        this.isLoading.set(false);
+        this.messages.update(msgs => [...msgs, { text: textToShow, role: 'bot' }]);
+      },
       error: (err) => {
-        console.error('Error al hablar con Gemini:', err);
-        this.messages.push({ text: 'Lo siento, hubo un error de conexión.', role: 'bot' });
-        this.isLoading = false;
+        console.error('Error al hablar con el asistente:', err);
+        this.messages.update(msgs => [...msgs, { text: 'Lo siento, hubo un error de conexión.', role: 'bot' }]);
+        this.isLoading.set(false);
       }
     });
   }

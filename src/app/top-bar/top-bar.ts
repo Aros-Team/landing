@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, Input } from '@angular/core';
 
 @Component({
   selector: 'app-top-bar',
@@ -7,5 +7,15 @@ import { Component } from '@angular/core';
   styleUrl: './top-bar.css',
 })
 export class TopBar {
+  @Input() activeSection = 'projects';
 
+  menuOpen = signal(false);
+
+  toggleMenu() {
+    this.menuOpen.update(v => !v);
+  }
+
+  closeMenu() {
+    this.menuOpen.set(false);
+  }
 }
